@@ -31,6 +31,8 @@ export type BillType = {
   id: number;
   billNumber: string;
   customerName?: string | null;
+  customerEmail?: string | null;
+  customerPhone?: string | null;
   total: number;
   createdAt: string;
 };

@@ -28,21 +28,23 @@ model Item {
 }
 
 model Bill {
-  id           Int        @id @default(autoincrement())
-  billNumber   String     @unique
-  customerName String?
-  total        Decimal    @db.Decimal(10, 2)
-  createdAt    DateTime   @default(now())
-  items        BillItem[]
+  id            Int        @id @default(autoincrement())
+  billNumber    String     @unique
+  customerName  String?
+  customerEmail String?
+  customerPhone String?
+  total         Decimal    @db.Decimal(10, 2)
+  createdAt     DateTime   @default(now())
+  items         BillItem[]
 }
 
 model BillItem {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   billId    Int
   itemId    Int
   quantity  Int
-  unitPrice Decimal @db.Decimal(10, 2)
-  lineTotal Decimal @db.Decimal(10, 2)
+  unitPrice Decimal  @db.Decimal(10, 2)
+  lineTotal Decimal  @db.Decimal(10, 2)
 
   bill Bill @relation(fields: [billId], references: [id], onDelete: Cascade)
   item Item @relation(fields: [itemId], references: [id])

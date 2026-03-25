@@ -8,6 +8,10 @@ export default function BillingCart({
   total,
   customerName,
   setCustomerName,
+  customerEmail,
+  setCustomerEmail,
+  customerPhone,
+  setCustomerPhone,
   increaseQty,
   decreaseQty,
   removeItem,
@@ -18,6 +22,10 @@ export default function BillingCart({
   total: number;
   customerName: string;
   setCustomerName: (value: string) => void;
+  customerEmail: string;
+  setCustomerEmail: (value: string) => void;
+  customerPhone: string;
+  setCustomerPhone: (value: string) => void;
   increaseQty: (itemId: number) => void;
   decreaseQty: (itemId: number) => void;
   removeItem: (itemId: number) => void;
@@ -33,6 +41,20 @@ export default function BillingCart({
         placeholder="Customer name (optional)"
         value={customerName}
         onChange={(e) => setCustomerName(e.target.value)}
+      />
+
+      <input
+        className="input mt-3"
+        placeholder="Customer email (optional)"
+        value={customerEmail}
+        onChange={(e) => setCustomerEmail(e.target.value)}
+      />
+
+      <input
+        className="input mt-3"
+        placeholder="Customer phone (optional)"
+        value={customerPhone}
+        onChange={(e) => setCustomerPhone(e.target.value)}
       />
 
       <div className="mt-6 space-y-4">

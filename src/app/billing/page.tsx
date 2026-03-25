@@ -11,6 +11,8 @@ export default function BillingPage() {
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [cart, setCart] = useState<CartItemType[]>([]);
   const [customerName, setCustomerName] = useState("");
+  const [customerEmail, setCustomerEmail] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
   const [loading, setLoading] = useState(true);
   const [billingLoading, setBillingLoading] = useState(false);
@@ -125,6 +127,8 @@ export default function BillingPage() {
         },
         body: JSON.stringify({
           customerName,
+          customerEmail,
+          customerPhone,
           items: cart,
         }),
       });
@@ -138,6 +142,8 @@ export default function BillingPage() {
       toast.success("Bill created");
       setCart([]);
       setCustomerName("");
+      setCustomerEmail("");
+      setCustomerPhone("");
       window.open(`/bills/${data.id}`, "_blank");
       loadData();
     } catch (error: any) {
@@ -225,6 +231,10 @@ export default function BillingPage() {
           total={total}
           customerName={customerName}
           setCustomerName={setCustomerName}
+          customerEmail={customerEmail}
+          setCustomerEmail={setCustomerEmail}
+          customerPhone={customerPhone}
+          setCustomerPhone={setCustomerPhone}
           increaseQty={increaseQty}
           decreaseQty={decreaseQty}
           removeItem={removeItem}

@@ -8,7 +8,7 @@ export async function GET() {
       orderBy: { createdAt: "desc" },
     });
 
-    const formatted = bills.map((bill) => ({
+    const formatted = bills.map((bill: any) => ({
       ...bill,
       total: Number(bill.total),
     }));
@@ -18,7 +18,7 @@ export async function GET() {
     console.error("BILLS GET ERROR:", error);
     return NextResponse.json(
       { message: "Failed to fetch bills" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -26,16 +26,16 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { customerName, items } = body;
+    const { customerName, customerEmail, customerPhone, items } = body;
 
     if (!items || !Array.isArray(items) || items.length === 0) {
       return NextResponse.json(
         { message: "Bill items are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: any) => {
       let total = 0;
 
       for (const cartItem of items) {
@@ -58,6 +58,8 @@ export async function POST(req: Request) {
         data: {
           billNumber: generateBillNumber(),
           customerName: customerName || null,
+          customerEmail: customerEmail || null,
+          customerPhone: customerPhone || null,
           total,
         },
       });
@@ -95,13 +97,13 @@ export async function POST(req: Request) {
         ...result,
         total: Number(result.total),
       },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error: any) {
     console.error("BILLS POST ERROR:", error);
     return NextResponse.json(
       { message: error.message || "Failed to create bill" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

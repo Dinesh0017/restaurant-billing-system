@@ -26,7 +26,7 @@ export async function GET(
     const formatted = {
       ...bill,
       total: Number(bill.total),
-      items: bill.items.map((item) => ({
+      items: bill.items.map((item:any) => ({
         ...item,
         unitPrice: Number(item.unitPrice),
         lineTotal: Number(item.lineTotal),

@@ -1,14 +1,53 @@
 "use client";
 
+import { useState } from "react";
 import { formatCurrency } from "@/lib/utils";
+import toast from "react-hot-toast";
 
 export default function PrintBill({ bill }: { bill: any }) {
+  const [sending, setSending] = useState(false);
+
+  async function sendBill() {
+    setSending(true);
+
+    try {
+      const res = await fetch("/api/bills/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ billId: bill.id }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to send bill");
+      }
+
+      toast.success("Bill sent successfully");
+    } catch (error: any) {
+      toast.error(error.message || "Failed to send bill");
+    } finally {
+      setSending(false);
+    }
+  }
+
   return (
     <div className="glass-card print-area mx-auto max-w-3xl p-6">
       <div className="no-print mb-6 flex justify-end gap-3">
         <button className="btn-primary" onClick={() => window.print()}>
           Print Bill
         </button>
+
+        <button
+          className="btn-primary"
+          onClick={sendBill}
+          disabled={sending}
+        >
+          {sending ? "Sending..." : "Send Bill"}
+        </button>
+
         <button className="btn-secondary" onClick={() => window.history.back()}>
           Back
         </button>
@@ -22,6 +61,12 @@ export default function PrintBill({ bill }: { bill: any }) {
         </p>
         <p className="text-slate-600">
           Customer: {bill.customerName || "Walk-in Customer"}
+        </p>
+        <p className="text-slate-600">
+          Email: {bill.customerEmail || "-"}
+        </p>
+        <p className="text-slate-600">
+          Phone: {bill.customerPhone || "-"}
         </p>
       </div>
 
