@@ -30,9 +30,9 @@ export type CartItemType = {
 export type BillType = {
   id: number;
   billNumber: string;
-  customerName?: string | null;
-  customerEmail?: string | null;
-  customerPhone?: string | null;
+  customerName: string ;
+  customerEmail: string;
+  customerPhone: string;
   total: number;
   createdAt: string;
 };

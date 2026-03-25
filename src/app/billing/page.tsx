@@ -27,8 +27,10 @@ export default function BillingPage() {
       const itemsData = await itemsRes.json();
       const categoriesData = await categoriesRes.json();
 
-      if (!itemsRes.ok) throw new Error(itemsData.message || "Failed to load items");
-      if (!categoriesRes.ok) throw new Error(categoriesData.message || "Failed to load categories");
+      if (!itemsRes.ok)
+        throw new Error(itemsData.message || "Failed to load items");
+      if (!categoriesRes.ok)
+        throw new Error(categoriesData.message || "Failed to load categories");
 
       setItems(itemsData.filter((item: ItemType) => item.stockQty > 0));
       setCategories(categoriesData);
@@ -56,8 +58,8 @@ export default function BillingPage() {
 
       setCart((prev) =>
         prev.map((c) =>
-          c.itemId === item.id ? { ...c, quantity: c.quantity + 1 } : c
-        )
+          c.itemId === item.id ? { ...c, quantity: c.quantity + 1 } : c,
+        ),
       );
       return;
     }
@@ -84,7 +86,7 @@ export default function BillingPage() {
           return { ...item, quantity: item.quantity + 1 };
         }
         return item;
-      })
+      }),
     );
   }
 
@@ -92,9 +94,11 @@ export default function BillingPage() {
     setCart((prev) =>
       prev
         .map((item) =>
-          item.itemId === itemId ? { ...item, quantity: item.quantity - 1 } : item
+          item.itemId === itemId
+            ? { ...item, quantity: item.quantity - 1 }
+            : item,
         )
-        .filter((item) => item.quantity > 0)
+        .filter((item) => item.quantity > 0),
     );
   }
 
@@ -114,6 +118,20 @@ export default function BillingPage() {
   async function createBill() {
     if (cart.length === 0) {
       toast.error("Please add items");
+      return;
+    }
+    if (!customerName.trim()) {
+      toast.error("Customer name is required");
+      return;
+    }
+
+    if (!customerEmail.trim()) {
+      toast.error("Customer email is required");
+      return;
+    }
+
+    if (!customerPhone.trim()) {
+      toast.error("Customer phone is required");
       return;
     }
 
@@ -215,7 +233,9 @@ export default function BillingPage() {
                       <h3 className="font-bold text-slate-900">{item.name}</h3>
                       <span className="badge-green">Stock {item.stockQty}</span>
                     </div>
-                    <p className="text-sm text-slate-500">{item.category.name}</p>
+                    <p className="text-sm text-slate-500">
+                      {item.category.name}
+                    </p>
                     <p className="text-lg font-semibold text-indigo-600">
                       {formatCurrency(item.price)}
                     </p>

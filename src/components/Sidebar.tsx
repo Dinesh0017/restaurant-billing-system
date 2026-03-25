@@ -8,15 +8,17 @@ import {
   Package,
   ShoppingCart,
   ReceiptText,
+  BarChart3,
 } from "lucide-react";
 import clsx from "clsx";
 
 const links = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
   { href: "/categories", label: "Categories", icon: Tags },
-  { href: "/inventory", label: "Add Items", icon: Package },
+  { href: "/inventory", label: "Add Item", icon: Package },
   { href: "/billing", label: "Billing", icon: ShoppingCart },
   { href: "/bills", label: "Bills", icon: ReceiptText },
+  { href: "/analytics", label: "Analytics", icon: BarChart3 },
 ];
 
 export default function Sidebar() {
@@ -25,9 +27,9 @@ export default function Sidebar() {
   return (
     <aside className="sidebar-glass hidden md:flex md:flex-col">
       <div className="border-b border-white/10 p-6">
-        <h1 className="text-2xl font-bold">HOT Kitchen</h1>
+        <h1 className="text-2xl font-bold">Restro POS</h1>
         <p className="mt-2 text-sm text-slate-300">
-          Add Items, billing and reports
+          Inventory, billing and reports
         </p>
       </div>
 

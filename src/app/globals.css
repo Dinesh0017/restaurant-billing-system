@@ -112,3 +112,6 @@ body {
 .pos-grid {
   @apply grid gap-6 xl:grid-cols-[1fr_380px];
 }
+.analytics-grid {
+  @apply grid gap-6 xl:grid-cols-[1.3fr_1fr];
+}

@@ -6,7 +6,6 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
 model Category {
   id        Int      @id @default(autoincrement())
   name      String   @unique
@@ -19,35 +18,34 @@ model Item {
   name       String
   price      Decimal    @db.Decimal(10, 2)
   stockQty   Int
-  imageUrl   String?
-  categoryId Int
-  category   Category   @relation(fields: [categoryId], references: [id])
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
+  categoryId Int
+  imageUrl   String?
   billItems  BillItem[]
+  category   Category   @relation(fields: [categoryId], references: [id])
 }
 
 model Bill {
   id            Int        @id @default(autoincrement())
   billNumber    String     @unique
-  customerName  String?
-  customerEmail String?
-  customerPhone String?
+  customerName  String
   total         Decimal    @db.Decimal(10, 2)
   createdAt     DateTime   @default(now())
+  customerEmail String
+  customerPhone String
   items         BillItem[]
 }
 
 model BillItem {
-  id        Int      @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   billId    Int
   itemId    Int
   quantity  Int
-  unitPrice Decimal  @db.Decimal(10, 2)
-  lineTotal Decimal  @db.Decimal(10, 2)
-
-  bill Bill @relation(fields: [billId], references: [id], onDelete: Cascade)
-  item Item @relation(fields: [itemId], references: [id])
+  unitPrice Decimal @db.Decimal(10, 2)
+  lineTotal Decimal @db.Decimal(10, 2)
+  bill      Bill    @relation(fields: [billId], references: [id], onDelete: Cascade)
+  item      Item    @relation(fields: [itemId], references: [id])
 
   @@index([billId])
   @@index([itemId])

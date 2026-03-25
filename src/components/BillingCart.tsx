@@ -38,23 +38,27 @@ export default function BillingCart({
 
       <input
         className="input mt-4"
-        placeholder="Customer name (optional)"
+        placeholder="Customer name"
         value={customerName}
         onChange={(e) => setCustomerName(e.target.value)}
+        required
       />
 
       <input
         className="input mt-3"
-        placeholder="Customer email (optional)"
+        placeholder="Customer email"
         value={customerEmail}
         onChange={(e) => setCustomerEmail(e.target.value)}
+        required
       />
 
       <input
         className="input mt-3"
-        placeholder="Customer phone (optional)"
+        placeholder="Customer phone"
         value={customerPhone}
         onChange={(e) => setCustomerPhone(e.target.value)}
+        required
+
       />
 
       <div className="mt-6 space-y-4">

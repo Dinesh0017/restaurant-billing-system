@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { transporter } from "@/lib/mailer";
+import { resend } from "@/lib/resend";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -32,14 +32,16 @@ export async function POST(req: Request) {
       );
     }
 
-    if (!bill.customerEmail) {
+    if (
+      !bill.customerName?.trim() ||
+      !bill.customerEmail?.trim() ||
+      !bill.customerPhone?.trim()
+    ) {
       return NextResponse.json(
-        { message: "Customer email not found for this bill" },
+        { message: "Customer name, email and phone are required" },
         { status: 400 }
       );
     }
-
-    await transporter.verify();
 
     const rows = bill.items
       .map(
@@ -55,20 +57,21 @@ export async function POST(req: Request) {
       .join("");
 
     const html = `
-      <div style="font-family: Arial, sans-serif; color:#111;">
+      <div style="font-family: Arial, sans-serif;">
         <h2>Restaurant Bill</h2>
         <p><strong>Bill No:</strong> ${bill.billNumber}</p>
-        <p><strong>Customer:</strong> ${bill.customerName || "Walk-in Customer"}</p>
+        <p><strong>Customer:</strong> ${bill.customerName}</p>
+        <p><strong>Email:</strong> ${bill.customerEmail}</p>
+        <p><strong>Phone:</strong> ${bill.customerPhone}</p>
         <p><strong>Date:</strong> ${new Date(bill.createdAt).toLocaleString()}</p>
-        <p><strong>Phone:</strong> ${bill.customerPhone || "-"}</p>
 
         <table style="border-collapse:collapse;width:100%;margin-top:16px;">
           <thead>
             <tr>
-              <th style="padding:8px;border:1px solid #ddd;background:#f8fafc;">Item</th>
-              <th style="padding:8px;border:1px solid #ddd;background:#f8fafc;">Qty</th>
-              <th style="padding:8px;border:1px solid #ddd;background:#f8fafc;">Unit Price</th>
-              <th style="padding:8px;border:1px solid #ddd;background:#f8fafc;">Total</th>
+              <th style="border:1px solid #ddd;padding:8px;">Item</th>
+              <th style="border:1px solid #ddd;padding:8px;">Qty</th>
+              <th style="border:1px solid #ddd;padding:8px;">Unit Price</th>
+              <th style="border:1px solid #ddd;padding:8px;">Total</th>
             </tr>
           </thead>
           <tbody>
@@ -76,13 +79,16 @@ export async function POST(req: Request) {
           </tbody>
         </table>
 
-        <h3 style="margin-top:20px;">Grand Total: LKR ${Number(bill.total).toFixed(2)}</h3>
-        <p>Thank you for visiting us.</p>
+        <h3 style="margin-top:20px;">
+          Grand Total: LKR ${Number(bill.total).toFixed(2)}
+        </h3>
+
+        <p>Thank you for visiting us!</p>
       </div>
     `;
 
-    const info = await transporter.sendMail({
-      from: `"Restaurant Billing System" <${process.env.MAIL_USER}>`,
+    const data = await resend.emails.send({
+      from: "Restaurant Billing <onboarding@resend.dev>",
       to: bill.customerEmail,
       subject: `Your Bill - ${bill.billNumber}`,
       html,
@@ -90,7 +96,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       message: "Bill sent successfully",
-      messageId: info.messageId,
+      data,
     });
   } catch (error) {
     console.error("SEND BILL ERROR:", error);

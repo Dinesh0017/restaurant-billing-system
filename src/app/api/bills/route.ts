@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { generateBillNumber } from "@/lib/utils";
 import { NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 
 export async function GET() {
   try {
@@ -28,6 +29,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { customerName, customerEmail, customerPhone, items } = body;
 
+    // ✅ Validate items
     if (!items || !Array.isArray(items) || items.length === 0) {
       return NextResponse.json(
         { message: "Bill items are required" },
@@ -35,9 +37,18 @@ export async function POST(req: Request) {
       );
     }
 
+    // ✅ Validate customer details
+    if (!customerName || !customerEmail || !customerPhone) {
+      return NextResponse.json(
+        { message: "Customer name, email and phone are required" },
+        { status: 400 },
+      );
+    }
+
     const result = await prisma.$transaction(async (tx: any) => {
       let total = 0;
 
+      // 🔍 Validate stock & calculate total
       for (const cartItem of items) {
         const dbItem = await tx.item.findUnique({
           where: { id: cartItem.itemId },
@@ -54,16 +65,18 @@ export async function POST(req: Request) {
         total += Number(dbItem.price) * cartItem.quantity;
       }
 
+      // 🧾 Create bill
       const bill = await tx.bill.create({
         data: {
           billNumber: generateBillNumber(),
-          customerName: customerName || null,
-          customerEmail: customerEmail || null,
-          customerPhone: customerPhone || null,
+          customerName,
+          customerEmail,
+          customerPhone,
           total,
         },
       });
 
+      // 🧾 Create bill items + update stock
       for (const cartItem of items) {
         const dbItem = await tx.item.findUnique({
           where: { id: cartItem.itemId },
