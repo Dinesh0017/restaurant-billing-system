@@ -1,26 +1,114 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
   font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.page-shell {
+  @apply min-h-screen;
+}
+
+.layout-grid {
+  @apply grid min-h-screen md:grid-cols-[260px_1fr];
+}
+
+.sidebar-glass {
+  @apply border-r border-white/30 bg-slate-950 text-white;
+}
+
+.main-area {
+  @apply p-4 md:p-6;
+}
+
+.glass-card {
+  @apply rounded-3xl border border-white/40 bg-white/80 shadow-xl backdrop-blur;
+}
+
+.section-title {
+  @apply text-2xl font-bold text-slate-900;
+}
+
+.section-subtitle {
+  @apply text-sm text-slate-500;
+}
+
+.input {
+  @apply w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100;
+}
+
+.select {
+  @apply w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100;
+}
+
+.btn-primary {
+  @apply rounded-2xl bg-indigo-600 px-4 py-3 font-semibold text-white transition hover:bg-indigo-700;
+}
+
+.btn-secondary {
+  @apply rounded-2xl bg-slate-100 px-4 py-3 font-semibold text-slate-800 transition hover:bg-slate-200;
+}
+
+.btn-danger {
+  @apply rounded-2xl bg-red-600 px-4 py-3 font-semibold text-white transition hover:bg-red-700;
+}
+
+.badge {
+  @apply inline-flex rounded-full px-3 py-1 text-xs font-semibold;
+}
+
+.badge-green {
+  @apply inline-flex rounded-full px-3 py-1 text-xs font-semibold bg-emerald-100 text-emerald-700;
+}
+
+.badge-yellow {
+  @apply inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700;
+}
+
+.badge-red {
+  @apply inline-flex rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700;
+}
+
+.table-wrap {
+  @apply overflow-x-auto rounded-3xl border border-slate-200 bg-white;
+}
+
+.table {
+  @apply w-full border-collapse;
+}
+
+.table th {
+  @apply border-b border-slate-200 bg-slate-50 px-4 py-4 text-left text-sm font-semibold text-slate-700;
+}
+
+.table td {
+  @apply border-b border-slate-100 px-4 py-4 text-sm text-slate-700;
+}
+
+.item-card {
+  @apply overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl;
+}
+
+.category-chip {
+  @apply rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100;
+}
+
+.category-chip-active {
+  @apply border-indigo-600 bg-indigo-600 text-white;
+}
+
+.pos-grid {
+  @apply grid gap-6 xl:grid-cols-[1fr_380px];
 }
