@@ -53,7 +53,7 @@ export default function BillingPanel() {
           price: Number(item.price),
           quantity: 1,
           stockQty: item.stockQty,
-          category: item.category ?? { id: 0, name: "Uncategorized" },
+          category: item.category?.name ?? "Uncategorized",
         },
       ]);
     }

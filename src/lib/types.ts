@@ -24,11 +24,7 @@ export type CartItemType = {
   quantity: number;
   stockQty: number;
   imageUrl?: string | null;
-  category: {
-    id: number;
-    name: string;
-  };
-};
+  category: string;
 
 export type BillType = {
   id: number;
