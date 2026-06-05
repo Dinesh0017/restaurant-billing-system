@@ -16,9 +16,7 @@ export default function BillingPanel() {
       const res = await fetch("/api/items");
       const data = await res.json();
 
-      setItems(
-        data.filter((item: ItemType) => item.stockQty > 0)
-      );
+      setItems(data.filter((item: ItemType) => item.stockQty > 0));
     } catch {
       toast.error("Failed to load items");
     }
@@ -53,6 +51,9 @@ export default function BillingPanel() {
           price: Number(item.price),
           quantity: 1,
           stockQty: item.stockQty,
+          imageUrl: item.imageUrl ?? null,
+
+          // ✅ FIXED: safely map category object → string
           category: item.category?.name ?? "Uncategorized",
         },
       ]);
@@ -142,7 +143,7 @@ export default function BillingPanel() {
 
   return (
     <div className="grid gap-6 lg:grid-cols-2">
-      {/* LEFT: ITEMS */}
+      {/* ITEMS */}
       <div className="card">
         <h2 className="mb-4 text-xl font-bold">Available Items</h2>
 
@@ -171,7 +172,7 @@ export default function BillingPanel() {
         </div>
       </div>
 
-      {/* RIGHT: CART */}
+      {/* CART */}
       <div className="card">
         <h2 className="mb-4 text-xl font-bold">Current Bill</h2>
 
@@ -197,6 +198,9 @@ export default function BillingPanel() {
                     <p className="text-sm text-slate-500">
                       {formatCurrency(item.price)} x{" "}
                       {item.quantity}
+                    </p>
+                    <p className="text-xs text-slate-400">
+                      {item.category}
                     </p>
                   </div>
 
